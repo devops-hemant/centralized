@@ -28,6 +28,5 @@ jobs:
            fetch-depth: 0
       - name: Get changes
         run: |
-          # git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > filenames.txt
-          git diff ${{ github.event.before }} ${{ github.event.after }} > filenames.txt
-          cat filenames.txt
+          filenames=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+          echo $filenames
