@@ -30,6 +30,10 @@ jobs:
         run: |
           allnames=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
 
+          echo "#######################################################"
+          echo "$allnames"
+          echo "#######################################################"
+
           filenames=$(echo $allnames | find . -type f \( -name "*.py" -or -name "*.scala" -or -name "*.sql" -or -name "*.r" -or -name "*.html" -or -name "*.dbc" -or -name "*.ipynb" -or -name "*.Rmd" \))
 
           echo "#######################################################"
