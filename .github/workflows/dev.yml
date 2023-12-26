@@ -43,7 +43,7 @@ jobs:
 
           for i in $filenames
           do
-            if [[ "$file" =~ \.(py|scala|sql|r|html|dbc|ipynb|Rmd)$ ]];
+            if [[ "$file" = *.@(py|scala|sql|r|html|dbc|ipynb|Rmd) ]];
             then
               echo "file is $i"
             else
