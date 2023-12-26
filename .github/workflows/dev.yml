@@ -28,5 +28,20 @@ jobs:
            fetch-depth: 0
       - name: Get changes
         run: |
-          filenames=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
-          echo $filenames
+          allnames=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+
+          filenames=$(echo $allnames | find . -type f \( -name "*.py" -or -name "*.scala" -or -name "*.sql" -or -name "*.r" -or -name "*.html" -or -name "*.dbc" -or -name "*.ipynb" -or -name "*.Rmd" \))
+
+          echo "#######################################################"
+          echo "$filenames"
+          echo "#######################################################"
+
+          for i in $filenames
+          do
+            if [[ -z $i ]]
+            then
+              echo "there is no file"
+            else
+              echo "file is $i"
+            fi
+          done
