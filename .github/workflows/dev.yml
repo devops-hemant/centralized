@@ -28,13 +28,13 @@ jobs:
            fetch-depth: 0
       - name: Get changes
         run: |
-          allnames=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+          filenames=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
 
-          echo "#######################################################"
-          echo "$allnames"
-          echo "#######################################################"
+          # echo "#######################################################"
+          # echo "$allnames"
+          # echo "#######################################################"
 
-          filenames=$(echo $allnames | find . -type f \( -name "*.py" -or -name "*.scala" -or -name "*.sql" -or -name "*.r" -or -name "*.html" -or -name "*.dbc" -or -name "*.ipynb" -or -name "*.Rmd" \))
+          # filenames=$(echo $allnames | find . -type f \( -name "*.py" -or -name "*.scala" -or -name "*.sql" -or -name "*.r" -or -name "*.html" -or -name "*.dbc" -or -name "*.ipynb" -or -name "*.Rmd" \))
 
           echo "#######################################################"
           echo "$filenames"
@@ -42,10 +42,7 @@ jobs:
 
           for i in $filenames
           do
-            if [[ -z $i ]]
-            then
-              echo "there is no file"
-            else
-              echo "file is $i"
+            if [[ "$file" =~ \.(py|scala|sql|r|html|dbc|ipynb|Rmd)$ ]]; then
+              echo " file is $i"
             fi
           done
