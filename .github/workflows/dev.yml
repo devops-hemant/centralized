@@ -41,12 +41,22 @@ jobs:
           echo "$filenames"
           echo "#######################################################"
 
-          for i in $filenames
-          do
+          while read -r file; do
+            echo -e "$file"
             if [[ "$file" = *.@(py|scala|sql|r|html|dbc|ipynb|Rmd) ]];
             then
               echo "file is $i"
             else
               echo "file is not available"
             fi
-          done
+          done < $filenames
+
+          # for i in $filenames
+          # do
+          #   if [[ "$file" = *.@(py|scala|sql|r|html|dbc|ipynb|Rmd) ]];
+          #   then
+          #     echo "file is $i"
+          #   else
+          #     echo "file is not available"
+          #   fi
+          # done
