@@ -28,6 +28,7 @@ jobs:
            fetch-depth: 0
       - name: Get changes
         run: |
+          set -x
           filenames=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
 
           # echo "#######################################################"
@@ -42,7 +43,10 @@ jobs:
 
           for i in $filenames
           do
-            if [[ "$file" =~ \.(py|scala|sql|r|html|dbc|ipynb|Rmd)$ ]]; then
-              echo " file is $i"
+            if [[ "$file" =~ \.(py|scala|sql|r|html|dbc|ipynb|Rmd)$ ]];
+            then
+              echo "file is $i"
+            else
+              echo "file is not available"
             fi
           done
