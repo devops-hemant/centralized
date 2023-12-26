@@ -39,7 +39,11 @@ jobs:
 
           echo "#######################################################"
           echo "$filenames"
+          echo "$filenames" > locations.txt
           echo "#######################################################"
+          cat locations.txt
+          echo "#######################################################"
+
 
           while read -r file; do
             echo -e "$file"
