@@ -29,13 +29,9 @@ jobs:
       - name: Get changes
         run: |
           set -x
-          filenames=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > locations.txt
 
-          # echo "#######################################################"
-          # echo "$allnames"
-          # echo "#######################################################"
-
-          # filenames=$(echo $allnames | find . -type f \( -name "*.py" -or -name "*.scala" -or -name "*.sql" -or -name "*.r" -or -name "*.html" -or -name "*.dbc" -or -name "*.ipynb" -or -name "*.Rmd" \))
+          filenames=$(cat locations.txt)
 
           echo "#######################################################"
           echo "$filenames"
