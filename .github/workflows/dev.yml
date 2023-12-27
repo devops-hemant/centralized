@@ -14,7 +14,7 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       DATABRICKS_WORKSPACE_URL: ${{ vars.URL }}
-      DB_TOKEN: ${{ secrets.DB_TOKEN }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
       USERNAME: ${{ github.actor }}
 
     steps: 
@@ -40,7 +40,7 @@ jobs:
         run: |
             touch tfile
 
-            echo "${{ secrets.DB_TOKEN }}" > tfile
+            echo "${{ secrets.DATABRICKS_TOKEN }}" > tfile
 
             databricks configure --host='${{ vars.URL }}' --token-file tfile
 
