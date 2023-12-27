@@ -1,86 +1,135 @@
-
-name: DEV
+name: centralized_Code_Deploy_auto
 
 on:
   workflow_call:
     inputs:
       environment:
-        description: "deploy to"
+        description: 'deploy to'
         type: string
         required: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  centralized_code_deploy:
+    runs-on: [ uhg-runner ]
+    environment: ${{ inputs.environment }}
+    env:
+      DATABRICKS_WORKSPACE_URL: ${{ vars.URL }}
+      DB_TOKEN: ${{ secrets.DB_TOKEN }}
+      USERNAME: ${{ github.actor }}
 
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Run a one-line script
-        run: echo "Hello, world! from DEV"
-
+    steps: 
+      - name: Pipeline run information
+        run: |
+          echo "This pipeline is triggered by ${{github.actor}}"
+          echo "Selected environment is ${{ inputs.environment }}"
+          
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
            fetch-depth: 0
-      - name: Get changes
+
+      - name: Set up Python
+        uses: actions/setup-python@v4.7.1
+        with:
+          python-version: '3.11.5' # Change to your Python version if needed
+  
+      - name: Install Databricks CLI
+        run: pip install databricks-cli
+  
+      - name: Deploy to Databricks
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > locations.txt
+            touch tfile
 
-          filenames=$(cat locations.txt)
+            echo "${{ secrets.DB_TOKEN }}" > tfile
 
-          echo "#######################################################"
-          echo "$filenames"
-          echo "#######################################################"
+            databricks configure --host='${{ vars.URL }}' --token-file tfile
 
-          # for file in $filenames
-          # do
-          #   if [[ "$file" = *.py ]] && [[ -f $file ]]
-          #   then
-          #     echo "file is /$file"
-          #   else
-          #     echo "file is either not Python or not available"
-          #   fi
 
-          #   if [[ "$file" = *.html ]] && [[ -f $file ]]
-          #   then
-          #     echo "file is /$file"
-          #   else
-          #     echo "file is either not html or not available"
-          #   fi
+            git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > locations.txt
 
-          #   if [[ "$file" = *.scala ]] && [[ -f $file ]]
-          #   then
-          #     echo "file is /$file"
-          #   else
-          #     echo "file is either not scala or not available"
-          #   fi
+            filenames=$(cat locations.txt)
+        
+            echo "###############################################"
+            echo "$filenames"
+            echo "###############################################"
 
-          #   if [[ "$file" = *.r ]] && [[ -f $file ]]
-          #   then
-          #     echo "file is /$file"
-          #   else
-          #     echo "file is either not .r or not available"
-          #   fi
+            for file in $filenames
+            do
+            if [[ -f $file ]]
+            then
+                case $file in
+                    *.py)
+                    echo "################ Deploying $file Python file ################"
+                    dir=${file%/*}
+                    databricks workspace mkdirs /%dir
+                    databricks workspace import -o -l PYTHON "$file" "/${file}"
+                    echo "################ Deployment of $file Python file done ################"
+                    ;;
 
-          #   if [[ "$file" = *.sql ]] && [[ -f $file ]]
-          #   then
-          #     echo "file is /$file"
-          #   else
-          #     echo "file is either not sql or not available"
-          #   fi
-          # done
+                    *.ipynb)
+                    echo "################ Deploying $file Python(.ipynb) file #################"
+                    dir=${file%/*}
+                    databricks workspace mkdirs /%dir
+                    databricks workspace import -o -l PYTHON "$file" "/${file}"
+                    echo "################ Deployment of $file Python file done ################"
+                    ;;
 
-          for file in $filenames
-          do
-            case $file in
-            "*.py")
-            echo $file is a Python file
-            ;;
-            "*.html")
-            echo $file is a html file
-            ;;
-            "*.sql")
-            echo $file is a sql file
-            ;;
-          done
+                    *.html)
+                    echo "################ Deploying $file HTML file #################"
+                    dir=${file%/*}
+                    databricks workspace mkdirs /%dir
+                    databricks workspace import -o -l PYTHON "$file" "/${file}"
+                    echo "################ Deployment of $file HTML file done ################"
+                    ;;
+
+                    *.sql)
+                    echo "################ Deploying $file SQL file #################"
+                    dir=${file%/*}
+                    databricks workspace mkdirs /%dir
+                    databricks workspace import -o -l SQL "$file" "/${file}"
+                    echo "################ Deployment of $file SQL file done ################"
+                    ;;
+
+                    *.r)
+                    echo "################ Deploying $file R(.r) file #################"
+                    dir=${file%/*}
+                    databricks workspace mkdirs /%dir
+                    databricks workspace import -o -l R "$file" "/${file}"
+                    echo "################ Deployment of $file R(.r) file done ################"
+                    ;;
+
+                    *.R)
+                    echo "################ Deploying $file R file #################"
+                    dir=${file%/*}
+                    databricks workspace mkdirs /%dir
+                    databricks workspace import -o -l R "$file" "/${file}"
+                    echo "################ Deployment of $file R file done ################"
+                    ;;
+
+                    *.scala)
+                    echo "################ Deploying $file SCALA file #################"
+                    dir=${file%/*}
+                    databricks workspace mkdirs /%dir
+                    databricks workspace import -o -l SCALA "$file" "/${file}"
+                    echo "################ Deployment of $file SCALA file done ################"
+                    ;;
+
+                    *.sc)
+                    echo "################ Deploying $file SCALA(.sc) file #################"
+                    dir=${file%/*}
+                    databricks workspace mkdirs /%dir
+                    databricks workspace import -o -l SCALA "$file" "/${file}"
+                    echo "################ Deployment of $file SCALA(.sc) file done ################"
+                    ;;
+
+                    *)
+                    echo "$file is not a compatible file format."
+                    ;;
+                esac
+            else
+              echo "$file file either not avaialble or deleted."
+              #databricks workspace rm /${file} && echo "$file file deleted from the databricks workspace."
+            fi
+            done
+
+            rm -rf tfil locations.txt
