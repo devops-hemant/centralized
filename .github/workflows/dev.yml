@@ -10,7 +10,7 @@ on:
 
 jobs:
   centralized_code_deploy:
-    runs-on: [ uhg-runner ]
+    runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
       DATABRICKS_WORKSPACE_URL: ${{ vars.URL }}
