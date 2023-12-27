@@ -33,40 +33,54 @@ jobs:
           echo "$filenames"
           echo "#######################################################"
 
+          # for file in $filenames
+          # do
+          #   if [[ "$file" = *.py ]] && [[ -f $file ]]
+          #   then
+          #     echo "file is /$file"
+          #   else
+          #     echo "file is either not Python or not available"
+          #   fi
+
+          #   if [[ "$file" = *.html ]] && [[ -f $file ]]
+          #   then
+          #     echo "file is /$file"
+          #   else
+          #     echo "file is either not html or not available"
+          #   fi
+
+          #   if [[ "$file" = *.scala ]] && [[ -f $file ]]
+          #   then
+          #     echo "file is /$file"
+          #   else
+          #     echo "file is either not scala or not available"
+          #   fi
+
+          #   if [[ "$file" = *.r ]] && [[ -f $file ]]
+          #   then
+          #     echo "file is /$file"
+          #   else
+          #     echo "file is either not .r or not available"
+          #   fi
+
+          #   if [[ "$file" = *.sql ]] && [[ -f $file ]]
+          #   then
+          #     echo "file is /$file"
+          #   else
+          #     echo "file is either not sql or not available"
+          #   fi
+          # done
+
           for file in $filenames
           do
-            if [[ "$file" = *.py ]] && [[ -f $file ]]
-            then
-              echo "file is /$file"
-            else
-              echo "file is either not Python or not available"
-            fi
-
-            if [[ "$file" = *.html ]] && [[ -f $file ]]
-            then
-              echo "file is /$file"
-            else
-              echo "file is either not html or not available"
-            fi
-
-            if [[ "$file" = *.scala ]] && [[ -f $file ]]
-            then
-              echo "file is /$file"
-            else
-              echo "file is either not scala or not available"
-            fi
-
-            if [[ "$file" = *.r ]] && [[ -f $file ]]
-            then
-              echo "file is /$file"
-            else
-              echo "file is either not .r or not available"
-            fi
-
-            if [[ "$file" = *.sql ]] && [[ -f $file ]]
-            then
-              echo "file is /$file"
-            else
-              echo "file is either not sql or not available"
-            fi
+            case $file in
+            "*.py")
+            echo $file is a Python file
+            ;;
+            "*.html")
+            echo $file is a html file
+            ;;
+            "*.sql")
+            echo $file is a sql file
+            ;;
           done
