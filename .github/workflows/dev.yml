@@ -62,7 +62,7 @@ jobs:
                     *.py)
                     echo "################ Deploying $file Python file ################"
                     dir=${file%/*}
-                    databricks workspace mkdirs /%dir
+                    databricks workspace mkdirs /$dir
                     databricks workspace import -o -l PYTHON "$file" "/${file}"
                     echo "################ Deployment of $file Python file done ################"
                     ;;
@@ -70,7 +70,7 @@ jobs:
                     *.ipynb)
                     echo "################ Deploying $file Python(.ipynb) file #################"
                     dir=${file%/*}
-                    databricks workspace mkdirs /%dir
+                    databricks workspace mkdirs /$dir
                     databricks workspace import -o -l PYTHON "$file" "/${file}"
                     echo "################ Deployment of $file Python file done ################"
                     ;;
@@ -78,7 +78,7 @@ jobs:
                     *.html)
                     echo "################ Deploying $file HTML file #################"
                     dir=${file%/*}
-                    databricks workspace mkdirs /%dir
+                    databricks workspace mkdirs /$dir
                     databricks workspace import -o -l PYTHON "$file" "/${file}"
                     echo "################ Deployment of $file HTML file done ################"
                     ;;
@@ -86,7 +86,7 @@ jobs:
                     *.sql)
                     echo "################ Deploying $file SQL file #################"
                     dir=${file%/*}
-                    databricks workspace mkdirs /%dir
+                    databricks workspace mkdirs /$dir
                     databricks workspace import -o -l SQL "$file" "/${file}"
                     echo "################ Deployment of $file SQL file done ################"
                     ;;
@@ -94,7 +94,7 @@ jobs:
                     *.r)
                     echo "################ Deploying $file R(.r) file #################"
                     dir=${file%/*}
-                    databricks workspace mkdirs /%dir
+                    databricks workspace mkdirs /$dir
                     databricks workspace import -o -l R "$file" "/${file}"
                     echo "################ Deployment of $file R(.r) file done ################"
                     ;;
@@ -102,7 +102,7 @@ jobs:
                     *.R)
                     echo "################ Deploying $file R file #################"
                     dir=${file%/*}
-                    databricks workspace mkdirs /%dir
+                    databricks workspace mkdirs /$dir
                     databricks workspace import -o -l R "$file" "/${file}"
                     echo "################ Deployment of $file R file done ################"
                     ;;
@@ -110,7 +110,7 @@ jobs:
                     *.scala)
                     echo "################ Deploying $file SCALA file #################"
                     dir=${file%/*}
-                    databricks workspace mkdirs /%dir
+                    databricks workspace mkdirs /$dir
                     databricks workspace import -o -l SCALA "$file" "/${file}"
                     echo "################ Deployment of $file SCALA file done ################"
                     ;;
@@ -118,7 +118,7 @@ jobs:
                     *.sc)
                     echo "################ Deploying $file SCALA(.sc) file #################"
                     dir=${file%/*}
-                    databricks workspace mkdirs /%dir
+                    databricks workspace mkdirs /$dir
                     databricks workspace import -o -l SCALA "$file" "/${file}"
                     echo "################ Deployment of $file SCALA(.sc) file done ################"
                     ;;
