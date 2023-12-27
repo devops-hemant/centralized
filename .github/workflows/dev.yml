@@ -39,10 +39,10 @@ jobs:
 
           for file in $filenames
           do
-            if [[ "$file" = *.@(py|scala|sql|r|html|dbc|ipynb|Rmd) ]];
+            if [[ "$file" = *.py ]] && [[ -f $file ]]
             then
               echo "file is /$file"
             else
-              echo "file is not available"
+              echo "file is either not compatible or not available"
             fi
           done
