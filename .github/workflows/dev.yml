@@ -25,7 +25,6 @@ jobs:
            fetch-depth: 0
       - name: Get changes
         run: |
-          set -x
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > locations.txt
 
           filenames=$(cat locations.txt)
