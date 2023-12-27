@@ -40,6 +40,34 @@ jobs:
             then
               echo "file is /$file"
             else
-              echo "file is either not compatible or not available"
+              echo "file is either not Python or not available"
+            fi
+
+            if [[ "$file" = *.html ]] && [[ -f $file ]]
+            then
+              echo "file is /$file"
+            else
+              echo "file is either not html or not available"
+            fi
+
+            if [[ "$file" = *.scala ]] && [[ -f $file ]]
+            then
+              echo "file is /$file"
+            else
+              echo "file is either not scala or not available"
+            fi
+
+            if [[ "$file" = *.r ]] && [[ -f $file ]]
+            then
+              echo "file is /$file"
+            else
+              echo "file is either not .r or not available"
+            fi
+
+            if [[ "$file" = *.sql ]] && [[ -f $file ]]
+            then
+              echo "file is /$file"
+            else
+              echo "file is either not sql or not available"
             fi
           done
