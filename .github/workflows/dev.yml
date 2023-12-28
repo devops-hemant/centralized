@@ -38,7 +38,6 @@ jobs:
   
       - name: Deploy to Databricks
         run: |
-            set -x
             touch tfile
 
             echo "${{ secrets.DATABRICKS_TOKEN }}" > tfile
