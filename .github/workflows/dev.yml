@@ -49,88 +49,55 @@ jobs:
             git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > locations.txt
 
             filenames=$(cat locations.txt)
-        
-            echo "###############################################"
+
+            echo "#######################################################"
             echo "$filenames"
-            echo "###############################################"
+            echo "#######################################################"
+
+            dbx_deploy() {
+              echo "#################### Deploying $file $1 file #####################"
+              dir=${file%/*}
+              databricks workspace mkdirs /%dir
+              databricks workspace import -o -l $1 "$file" "/${file}"
+              echo "################ Deployment of $file $1 file done ################"
+            }
 
             for file in $filenames
             do
-            if [[ -f $file ]]
-            then
-                case $file in
-                    *.py)
-                    echo "################ Deploying $file Python file ################"
-                    dir=${file%/*}
-                    databricks workspace mkdirs /$dir
-                    databricks workspace import -o -l PYTHON "$file" "/${file}"
-                    echo "################ Deployment of $file Python file done ################"
-                    ;;
+              if [[ -f $file ]]
+              then
+                  case $file in
+                      *.py)
+                      dbx_deploy PYTHON
+                      ;;
 
-                    *.ipynb)
-                    echo "################ Deploying $file Python(.ipynb) file #################"
-                    dir=${file%/*}
-                    databricks workspace mkdirs /$dir
-                    databricks workspace import -o -l PYTHON "$file" "/${file}"
-                    echo "################ Deployment of $file Python file done ################"
-                    ;;
+                      *.ipynb)
+                      dbx_deploy PYTHON
+                      ;;
 
-                    *.html)
-                    echo "################ Deploying $file HTML file #################"
-                    dir=${file%/*}
-                    databricks workspace mkdirs /$dir
-                    databricks workspace import -o -l PYTHON "$file" "/${file}"
-                    echo "################ Deployment of $file HTML file done ################"
-                    ;;
+                      *.html)
+                      dbx_deploy PYTHON
+                      ;;
 
-                    *.sql)
-                    echo "################ Deploying $file SQL file #################"
-                    dir=${file%/*}
-                    databricks workspace mkdirs /$dir
-                    databricks workspace import -o -l SQL "$file" "/${file}"
-                    echo "################ Deployment of $file SQL file done ################"
-                    ;;
+                      *.sql)
+                      dbx_deploy SQL
+                      ;;
 
-                    *.r)
-                    echo "################ Deploying $file R(.r) file #################"
-                    dir=${file%/*}
-                    databricks workspace mkdirs /$dir
-                    databricks workspace import -o -l R "$file" "/${file}"
-                    echo "################ Deployment of $file R(.r) file done ################"
-                    ;;
+                      *.r)
+                      dbx_deploy R
+                      ;;
 
-                    *.R)
-                    echo "################ Deploying $file R file #################"
-                    dir=${file%/*}
-                    databricks workspace mkdirs /$dir
-                    databricks workspace import -o -l R "$file" "/${file}"
-                    echo "################ Deployment of $file R file done ################"
-                    ;;
+                      *.scala)
+                      dbx_deploy SCALA
+                      ;;
 
-                    *.scala)
-                    echo "################ Deploying $file SCALA file #################"
-                    dir=${file%/*}
-                    databricks workspace mkdirs /$dir
-                    databricks workspace import -o -l SCALA "$file" "/${file}"
-                    echo "################ Deployment of $file SCALA file done ################"
-                    ;;
-
-                    *.sc)
-                    echo "################ Deploying $file SCALA(.sc) file #################"
-                    dir=${file%/*}
-                    databricks workspace mkdirs /$dir
-                    databricks workspace import -o -l SCALA "$file" "/${file}"
-                    echo "################ Deployment of $file SCALA(.sc) file done ################"
-                    ;;
-
-                    *)
-                    echo "$file is not a compatible file format."
-                    ;;
-                esac
-            else
-              echo "$file file either not avaialble or deleted."
-              #databricks workspace rm /${file} && echo "$file file deleted from the databricks workspace."
-            fi
+                      *)
+                      echo "$file is not a compatible file format"
+                      ;;
+                  esac
+              else
+                echo "$file file not avaialble"
+              fi
             done
 
             rm -rf tfil locations.txt
