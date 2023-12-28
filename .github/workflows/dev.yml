@@ -67,17 +67,17 @@ jobs:
               if [[ -f $file ]]
               then
                   case $file in
-                      *.py)
+                      *.@(py|ipynb|html))
                       dbx_deploy PYTHON
                       ;;
 
-                      *.ipynb)
-                      dbx_deploy PYTHON
-                      ;;
+                      # *.ipynb)
+                      # dbx_deploy PYTHON
+                      # ;;
 
-                      *.html)
-                      dbx_deploy PYTHON
-                      ;;
+                      # *.html)
+                      # dbx_deploy PYTHON
+                      # ;;
 
                       *.sql)
                       dbx_deploy SQL
