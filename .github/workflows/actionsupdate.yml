@@ -46,6 +46,9 @@ jobs:
 
             echo "$FILE_CONTENT" > "$FILE_PATH"
 
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+
             git add "$FILE_PATH"
             git commit -m "Update/Create $FILE_PATH"
             git push origin "$branch"
