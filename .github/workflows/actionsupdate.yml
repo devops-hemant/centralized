@@ -1,0 +1,60 @@
+name: Update/Create File in All Repositories
+
+on:
+  workflow_dispatch:
+    inputs:
+      file_path:
+        description: "Enter the yml file path"
+        type: string
+        required: true
+        default: ".github/workflows/"
+
+jobs:
+  update-file:
+    runs-on: ubuntu-latest
+    env:
+        PERSONAL_ACCESS_TOKEN: ${{ secrets.PAT }}
+        REPOS: ${{ var.repos }}
+        FILE_PATH: ${{ inputs.file_path }}
+
+    steps:
+    -  name: Checkout repository
+       uses: actions/checkout@v2
+
+    -  name: Set up environment
+       run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+
+    -  name: Run update file script
+       run: |
+          set -e
+
+          # Get data from the updated file into a veriable
+          FILE_CONTENT=$(cat "$FILE_PATH")
+
+          # Helper function to update/create file in a branch
+          update_file_in_branch() {
+            local repo=$1
+            local branch=$2
+
+            git clone "https://$PAT@github.com/$GITHUB_REPOSITORY_OWNER/$repo.git"
+            cd "$repo"
+
+            git checkout "$branch" || git checkout -b "$branch"
+
+            echo "$FILE_CONTENT" > "$FILE_PATH"
+
+            git add "$FILE_PATH"
+            git commit -m "Update/Create $FILE_PATH"
+            git push origin "$branch"
+
+            cd ..
+            rm -rf "$repo"
+          }
+
+          # Iterate over each repository and update/create the file in main and develop branches
+          for repo in $REPOS; do
+            update_file_in_branch "$repo" "main"
+            update_file_in_branch "$repo" "develop"
+          done
