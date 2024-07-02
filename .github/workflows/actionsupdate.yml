@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         PERSONAL_ACCESS_TOKEN: ${{ secrets.PAT }}
-        REPOS: ${{ var.repos }}
+        REPOS: ${{ vars.repos }}
         FILE_PATH: ${{ inputs.file_path }}
         GITHUB_REPOSITORY_OWNER: "devops-hemant"
 
